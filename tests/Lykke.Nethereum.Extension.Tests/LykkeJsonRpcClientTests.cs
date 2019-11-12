@@ -83,5 +83,19 @@ namespace Lykke.Nethereum.Extension.Tests
 
             Console.WriteLine(blockNumber);
         }
+
+        [Test]
+        public async Task GetTransactionByHash()
+        {
+            var client = new LykkeJsonRpcClient(NodeUrl);
+            var result = await client.ExecuteRpcBatchAsync(
+                new RpcRequestMessage(1, ApiMethodNames.eth_getTransactionByHash, "0x99e1ad3ff1508446b29818c08d95926f6f2636afdd85400290cae43419b4fce6"),
+                new RpcRequestMessage(2, ApiMethodNames.eth_getTransactionByHash, "0xa401c9633256cf769f1d0d2d3af74711d71b106bb6f04e56f87518a6c3526fb0"),
+                new RpcRequestMessage(3, ApiMethodNames.eth_getTransactionByHash, "0x24e3c0765dbb0c073526ca22ece466e58500475fc50f07ec196c7399fb93913d"));
+
+            Assert.AreEqual(3, result.Count);
+
+            Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
+        }
     }
 }
