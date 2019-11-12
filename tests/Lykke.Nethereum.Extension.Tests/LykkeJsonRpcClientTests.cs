@@ -60,6 +60,8 @@ namespace Lykke.Nethereum.Extension.Tests
             
             Console.WriteLine(result.Count);
             Console.WriteLine(JsonConvert.SerializeObject(result));
+
+            Console.WriteLine(result[1].DataAsString());
         }
 
         [Test]

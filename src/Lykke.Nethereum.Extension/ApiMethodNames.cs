@@ -4,5 +4,6 @@
     {
         public const string eth_getBalance = "eth_getBalance";
         public const string eth_blockNumber = "eth_blockNumber";
+        public const string eth_sendRawTransaction = "eth_sendRawTransaction";
     }
 }

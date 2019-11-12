@@ -22,5 +22,10 @@ namespace Lykke.Nethereum.Extension
             var id = message.Id.ToString();
             return id;
         }
+
+        public static string DataAsString(this RpcResponseMessage message)
+        {
+            return message.Result?.ToString();
+        }
     }
 }

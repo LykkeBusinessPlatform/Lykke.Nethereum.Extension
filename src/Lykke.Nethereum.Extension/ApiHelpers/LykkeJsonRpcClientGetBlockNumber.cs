@@ -28,7 +28,7 @@ namespace Lykke.Nethereum.Extension.ApiHelpers
                 throw new JsonRpcClientRpcException(result[0].Error.Message, result[0].Error.Code);
             }
 
-            var data = result[0].Result.ToString();
+            var data = result[0].DataAsString();
             var balance = Convert.ToInt64(data, 16);
             return balance;
         }
