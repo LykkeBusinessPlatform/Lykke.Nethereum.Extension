@@ -4,6 +4,19 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Version>1.0.0</Version>
     <PackageId>LykkeBiz.Nethereum.Extension</PackageId>
+
+    <Product>Lykke.Nethereum.Extension</Product>
+    <Company>Lykke Business</Company>
+    <Authors>Lykke Business</Authors>
+    <Description>The extension to Nethereum library</Description>
+    <PackageProjectUrl>https://github.com/LykkeBusinessPlatform/Lykke.Nethereum.Extension</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/LykkeBusinessPlatform/Lykke.Nethereum.Extension</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/14153330?v=3&amp;amp;s=200</PackageIconUrl>
+    <PackageTags>LykkeBusiness</PackageTags>
+    <PackageTags>Nethereum</PackageTags>
+    <PackageTags>Ethereum</PackageTags>
+    <PackageTags>JsonRpc</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
