@@ -97,5 +97,32 @@ namespace Lykke.Nethereum.Extension.Tests
                 Assert.AreEqual("qwe 11", id);
             }
         }
+
+        [Test]
+        public async Task Timeout()
+        {
+            var client = new HttpClient();
+            client.Timeout = TimeSpan.FromMilliseconds(200);
+            try
+            {
+                var result = await client.GetStringAsync("http://blog.cincura.net/");
+            }
+            catch (HttpRequestException)
+            {
+                // handle somehow
+                Console.WriteLine("HttpRequestException");
+            }
+            catch (TimeoutException)
+            {
+                // handle somehow
+                Console.WriteLine("TimeoutException");
+            }
+            catch (OperationCanceledException e)
+            {
+                // handle somehow
+                Console.WriteLine("OperationCanceledException");
+                Console.WriteLine(e);
+            }
+        }
     }
 }
