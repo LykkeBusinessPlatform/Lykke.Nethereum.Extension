@@ -7,17 +7,17 @@ using Newtonsoft.Json;
 
 namespace Lykke.Nethereum.Extension.ApiHelpers
 {
-    public static class LykkeJsonRpcClientGetTransactionReceipt
+    public static class LykkeJsonRpcClientGetTransactionByHash
     {
         /// <summary>
-        /// Returns the receipt of a transaction by transaction hash.
-        /// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt
+        /// Returns the information about a transaction requested by transaction hash.
+        /// https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash
         /// </summary>
-        /// <returns>A transaction receipt object, or null when no receipt was found</returns>
-        public static async Task<TransactionReceipt> GetTransactionReceiptAsync(this ILykkeJsonRpcClient client, string transactionHash)
+        /// <returns>A transaction object, or null when no transaction was found</returns>
+        public static async Task<Transaction> GetTransactionByHashAsync(this ILykkeJsonRpcClient client, string transactionHash)
         {
             var result = await client.ExecuteRpcBatchAsync(
-                new RpcRequestMessage(1, ApiMethodNames.eth_getTransactionReceipt, transactionHash));
+                new RpcRequestMessage(1, ApiMethodNames.eth_getTransactionByHash, transactionHash));
 
             if (result.Count != 1)
             {
@@ -32,7 +32,7 @@ namespace Lykke.Nethereum.Extension.ApiHelpers
             if (result[0].Result == null)
                 return null;
 
-            var receipt = JsonConvert.DeserializeObject<TransactionReceipt>(result[0].Result.ToString());
+            var receipt = JsonConvert.DeserializeObject<Transaction>(result[0].Result.ToString());
             return receipt;
         }
     }

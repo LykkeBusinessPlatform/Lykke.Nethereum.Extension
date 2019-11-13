@@ -90,7 +90,7 @@ namespace Lykke.Nethereum.Extension.Tests
         }
 
         [Test]
-        public async Task GetTransactionByHash()
+        public async Task GetTransactionByHash_raw()
         {
             var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
             var result = await client.ExecuteRpcBatchAsync(
@@ -128,6 +128,18 @@ namespace Lykke.Nethereum.Extension.Tests
             Console.WriteLine();
 
             Assert.IsTrue(1 == receipt.Status.Value);
+        }
+
+        [Test]
+        public async Task GetTransactionByHash()
+        {
+            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
+            var receipt = await client.GetTransactionByHashAsync("0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591");
+
+            Console.WriteLine(JsonConvert.SerializeObject(receipt, Formatting.Indented));
+            Console.WriteLine();
+
+            Assert.IsTrue(6549855 == receipt.BlockNumber.Value);
         }
     }
 }
