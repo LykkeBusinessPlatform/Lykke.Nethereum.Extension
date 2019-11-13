@@ -46,18 +46,22 @@ namespace Lykke.Nethereum.Extension.Tests
         }
 
         [Test]
-        public async Task ExecutePost_TwoDifferentCall()
+        public async Task ExecutePost_DifferentCalls()
         {
             var client = new LykkeJsonRpcClient(NodeUrl);
+            
+            var guid = Guid.NewGuid();
 
             var result = await client.ExecuteRpcBatchAsync(
                 new RpcRequestMessage(1, "eth_getBalance", "0xd092cd556828f7a2f4db7eeb9fe3b261cd664350", "latest"),
-                new RpcRequestMessage("hello world", "eth_blockNumber"));
+                new RpcRequestMessage("hello world", "eth_blockNumber"),
+                new RpcRequestMessage(guid, "eth_blockNumber"));
 
-            Assert.AreEqual(2, result.Count, "incorrect result count");
+            Assert.AreEqual(3, result.Count, "incorrect result count");
             Assert.AreEqual(1, result[0].IdAsInteger(), "incorrect id 1");
             Assert.AreEqual("hello world", result[1].IdAsString(), "incorrect id 2");
-            
+            Assert.AreEqual(guid, result[2].IdAsGuid(), "incorrect id 3");
+
             Console.WriteLine(result.Count);
             Console.WriteLine(JsonConvert.SerializeObject(result));
 
