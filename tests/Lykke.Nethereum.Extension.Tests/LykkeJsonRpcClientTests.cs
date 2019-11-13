@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Lykke.Nethereum.Extension.ApiHelpers;
 using Nethereum.JsonRpc.Client.RpcMessages;
+using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -91,7 +92,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task GetTransactionByHash()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl);
+            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
             var result = await client.ExecuteRpcBatchAsync(
                 new RpcRequestMessage(1, ApiMethodNames.eth_getTransactionByHash, "0x99e1ad3ff1508446b29818c08d95926f6f2636afdd85400290cae43419b4fce6"),
                 new RpcRequestMessage(2, ApiMethodNames.eth_getTransactionByHash, "0xa401c9633256cf769f1d0d2d3af74711d71b106bb6f04e56f87518a6c3526fb0"),
@@ -100,6 +101,33 @@ namespace Lykke.Nethereum.Extension.Tests
             Assert.AreEqual(3, result.Count);
 
             Console.WriteLine(JsonConvert.SerializeObject(result, Formatting.Indented));
+        }
+
+        [Test]
+        public async Task GetTransactionReceipt_raw()
+        {
+            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
+            var result = await client.ExecuteRpcBatchAsync(
+                new RpcRequestMessage(1, "eth_getTransactionReceipt", "0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591"));
+
+            
+
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Console.WriteLine();
+            var receipt = JsonConvert.DeserializeObject<TransactionReceipt>(result[0].Result.ToString());
+            Console.WriteLine(JsonConvert.SerializeObject(receipt));
+        }
+
+        [Test]
+        public async Task GetTransactionReceipt()
+        {
+            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
+            var receipt = await client.GetTransactionReceiptAsync("0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591");
+
+            Console.WriteLine(JsonConvert.SerializeObject(receipt));
+            Console.WriteLine();
+
+            Assert.IsTrue(1 == receipt.Status.Value);
         }
     }
 }

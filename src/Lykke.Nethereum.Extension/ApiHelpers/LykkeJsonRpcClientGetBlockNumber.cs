@@ -33,5 +33,4 @@ namespace Lykke.Nethereum.Extension.ApiHelpers
             return balance;
         }
     }
-
 }

@@ -124,5 +124,7 @@ namespace Lykke.Nethereum.Extension.Tests
                 Console.WriteLine(e);
             }
         }
+
+        
     }
 }
