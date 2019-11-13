@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Lykke.Nethereum.Extension.ApiHelpers;
+using Lykke.Nethereum.Extension.Tools;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
@@ -15,7 +16,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task ExecutePost_sendRawTransaction()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl);
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory());
 
             var result = await client.ExecuteRpcBatchAsync(new RpcRequestMessage[]
             {
@@ -33,7 +34,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task ExecutePost_getBalance()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl);
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory());
 
             var result = await client.ExecuteRpcBatchAsync( new RpcRequestMessage(1, "eth_getBalance", "0xd092cd556828f7a2f4db7eeb9fe3b261cd664350", "latest"));
 
@@ -49,7 +50,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task ExecutePost_DifferentCalls()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl);
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory(), TimeSpan.FromMinutes(1));
             
             var guid = Guid.NewGuid();
 
@@ -72,7 +73,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task GetBalance()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl);
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory());
 
             var balance = await client.GetEtherBalanceAsync("0xd092cd556828f7a2f4db7eeb9fe3b261cd664350");
 
@@ -82,7 +83,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task GetBlockNumber()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl);
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory());
 
             var blockNumber = await client.GetBlockNumberAsync();
 
@@ -92,7 +93,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task GetTransactionByHash_raw()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory(), TimeSpan.FromMinutes(1));
             var result = await client.ExecuteRpcBatchAsync(
                 new RpcRequestMessage(1, ApiMethodNames.eth_getTransactionByHash, "0x99e1ad3ff1508446b29818c08d95926f6f2636afdd85400290cae43419b4fce6"),
                 new RpcRequestMessage(2, ApiMethodNames.eth_getTransactionByHash, "0xa401c9633256cf769f1d0d2d3af74711d71b106bb6f04e56f87518a6c3526fb0"),
@@ -106,7 +107,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task GetTransactionReceipt_raw()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory(), TimeSpan.FromMinutes(1));
             var result = await client.ExecuteRpcBatchAsync(
                 new RpcRequestMessage(1, "eth_getTransactionReceipt", "0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591"));
 
@@ -121,7 +122,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task GetTransactionReceipt()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory(), TimeSpan.FromMinutes(1));
             var receipt = await client.GetTransactionReceiptAsync("0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591");
 
             Console.WriteLine(JsonConvert.SerializeObject(receipt));
@@ -133,7 +134,7 @@ namespace Lykke.Nethereum.Extension.Tests
         [Test]
         public async Task GetTransactionByHash()
         {
-            var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
+            var client = new LykkeJsonRpcClient(NodeUrl, GeneratorHttpClientFactory.BuildHttpClientFactory(), TimeSpan.FromMinutes(1));
             var transaction = await client.GetTransactionByHashAsync("0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591");
 
             Console.WriteLine(JsonConvert.SerializeObject(transaction, Formatting.Indented));
