@@ -49,3 +49,13 @@ var receipt = await client.GetTransactionReceiptAsync("0xee6acd2754dce87a5d5a4ca
 
 3. Handle results
 Assert.IsTrue(1 == receipt.Status.Value);
+
+# Get Transaction By Hash
+1. Create RPC client: 
+ILykkeJsonRpcClientvar client = new LykkeJsonRpcClient(NodeUrl);
+
+2. Make a call:
+var transaction = await client.GetTransactionByHashAsync("0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591");
+
+3. Handle results
+Assert.IsTrue(6549855 == transaction.BlockNumber.Value);

@@ -134,12 +134,12 @@ namespace Lykke.Nethereum.Extension.Tests
         public async Task GetTransactionByHash()
         {
             var client = new LykkeJsonRpcClient(NodeUrl, TimeSpan.FromMinutes(1));
-            var receipt = await client.GetTransactionByHashAsync("0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591");
+            var transaction = await client.GetTransactionByHashAsync("0xee6acd2754dce87a5d5a4ca8ce366a00b8ae3917039eb3ad9179ef6d9eae2591");
 
-            Console.WriteLine(JsonConvert.SerializeObject(receipt, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(transaction, Formatting.Indented));
             Console.WriteLine();
 
-            Assert.IsTrue(6549855 == receipt.BlockNumber.Value);
+            Assert.IsTrue(6549855 == transaction.BlockNumber.Value);
         }
     }
 }
