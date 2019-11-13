@@ -5,23 +5,26 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Lykke.Nethereum.Extension.Exceptions;
 using Lykke.Nethereum.Extension.Tools;
+using Microsoft.Extensions.DependencyInjection;
 using Nethereum.JsonRpc.Client;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 
 namespace Lykke.Nethereum.Extension
 {
-    public class LykkeJsonRpcClient: ILykkeJsonRpcClient
+    public class LykkeJsonRpcClient: ILykkeJsonRpcClient, IDisposable
     {
         private readonly string _httpsConnectionString;
         private readonly TimeSpan _timeout;
         private readonly IHttpClientFactory _httpFactory;
+        private readonly ServiceProvider _serviceProvider;
 
         public LykkeJsonRpcClient(string httpsConnectionString, TimeSpan timeout)
         {
             _httpsConnectionString = httpsConnectionString;
             _timeout = timeout;
-            _httpFactory = GeneratorHttpClientFactory.BuildHttpClientFactory();
+            _serviceProvider = GeneratorHttpClientFactory.BuildServiceProvider();
+            _httpFactory = _serviceProvider.GetService<IHttpClientFactory>();
         }
 
         public LykkeJsonRpcClient(string httpsConnectionString): this(httpsConnectionString, TimeSpan.FromSeconds(10))
@@ -53,6 +56,11 @@ namespace Lykke.Nethereum.Extension
                 throw new RpcClientTimeoutException($"Rpc call Timeout ({_timeout})", e);
             }
             
+        }
+
+        public void Dispose()
+        {
+            _serviceProvider?.Dispose();
         }
     }
 }
