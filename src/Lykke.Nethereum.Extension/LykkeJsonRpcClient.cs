@@ -19,6 +19,9 @@ namespace Lykke.Nethereum.Extension
 
         public LykkeJsonRpcClient(string httpsConnectionString, IHttpClientFactory httpClientFactory, TimeSpan timeout)
         {
+            if (!httpsConnectionString.StartsWith("http"))
+                throw new ArgumentException("Connection string can be http or https only", nameof(httpsConnectionString));
+
             _httpsConnectionString = httpsConnectionString;
             _timeout = timeout;
             _httpFactory = httpClientFactory;
@@ -33,21 +36,22 @@ namespace Lykke.Nethereum.Extension
         {
             try
             {
-                using (var client = _httpFactory.CreateClient())
-                {
-                    client.Timeout = _timeout;
-                    var result = await client.PostAsync(_httpsConnectionString, new JsonContent(messages));
-                    var content = result.Content != null
-                        ? await result.Content.ReadAsStringAsync()
-                        : string.Empty;
+                var client = _httpFactory.CreateClient();
+                
+                client.Timeout = _timeout;
 
-                    if (result.StatusCode != HttpStatusCode.OK)
-                        throw new JsonRpcClientTransportException(result.StatusCode, content);
+                var result = await client.PostAsync(_httpsConnectionString, new JsonContent(messages));
+                
+                var content = result.Content != null
+                    ? await result.Content.ReadAsStringAsync()
+                    : string.Empty;
 
-                    var response = JsonConvert.DeserializeObject<List<RpcResponseMessage>>(content);
+                if (result.StatusCode != HttpStatusCode.OK)
+                    throw new JsonRpcClientTransportException(result.StatusCode, content);
 
-                    return response;
-                }
+                var response = JsonConvert.DeserializeObject<List<RpcResponseMessage>>(content);
+
+                return response;
             }
             catch (OperationCanceledException e)
             {
